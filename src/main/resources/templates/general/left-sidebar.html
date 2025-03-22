@@ -141,6 +141,19 @@
                         <li><a th:href="${home + 'employee/contract/create'}">Create new contract</a></li>
                     </ul>
                 </li>
+                <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Data Configuration</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span class="hide-menu">Data Configuration</span>
+                    </a>
+                    <ul class="collapse">
+                        <li><a th:href="${home + 'data/config/resetData'}">Reset Data</a></li>
+                        <li><a th:href="${home + 'employee/ticket/create-ticket'}">Import CSV</a></li>
+                        <li><a th:href="${home + 'employee/ticket/create-ticket'}">Generate Data</a></li>
+                    </ul>
+                </li>
+
                 <li class="nav-small-cap">--- Email Templates</li>
                 <li>
                     <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
