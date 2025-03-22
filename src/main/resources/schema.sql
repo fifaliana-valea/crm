@@ -286,9 +286,43 @@ CREATE TABLE IF NOT EXISTS `trigger_ticket` (
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
+CREATE TABLE IF NOT EXISTS `trigger_ticket_histo` (
+  `id` int unsigned NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `description` text,
+  `status` varchar(50) DEFAULT NULL,
+  `priority` varchar(50) DEFAULT NULL,
+  `customer_id` int unsigned NOT NULL,
+  `manager_id` int DEFAULT NULL,
+  `employee_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `delete_at` datetime DEFAULT NULL, -- Colonne supplémentaire pour la date de suppression
+  PRIMARY KEY (`id`),
+  KEY `fk_ticket_histo_customer` (`customer_id`),
+  KEY `fk_ticket_histo_manager` (`manager_id`),
+  KEY `fk_ticket_histo_employee` (`employee_id`),
+  CONSTRAINT `fk_ticket_histo_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `fk_ticket_histo_manager` FOREIGN KEY (`manager_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_ticket_histo_employee` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 --
 -- Table structure for table `trigger_contract`
 --
+
+
+
+
+CREATE TABLE IF NOT EXISTS `ticket_expense` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `amount` decimal(18,2) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `ticket_histo_id` int unsigned NOT NULL, -- Renommer id_1 en ticket_histo_id
+  PRIMARY KEY (`id`),
+  KEY `fk_ticket_expense_histo` (`ticket_histo_id`),
+  CONSTRAINT `fk_ticket_expense_histo` FOREIGN KEY (`ticket_histo_id`) REFERENCES `trigger_ticket_histo` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

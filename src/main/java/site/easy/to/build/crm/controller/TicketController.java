@@ -79,7 +79,9 @@ public class TicketController {
             return "error/access-denied";
         }
 
+        TicketExpense ticketExpense = ticketExpenseService.getLatestExpenseForTicketHisto(ticket.getTicketId());
         model.addAttribute("ticket",ticket);
+        model.addAttribute("ticketExpense",ticketExpense);
         return "ticket/show-ticket";
     }
 
@@ -177,15 +179,15 @@ public class TicketController {
         ticket.setEmployee(employee);
         ticket.setCreatedAt(LocalDateTime.now());
 
-        TicketHisto ticketHisto = Ticket.convertToTicketHisto(ticket);
-        ticketService.save(ticket);
+        Ticket ticket1 = ticketService.save(ticket);
+
+        TicketHisto ticketHisto = Ticket.convertToTicketHisto(ticket1);
         TicketHisto  ticketHisto1=ticketHistoService.save(ticketHisto);
 
         TicketExpense ticketExpense = new TicketExpense();
-        ticketExpense.setTicketHisto(ticketHisto);
+        ticketExpense.setTicketHisto(ticketHisto1);
         ticketExpense.setAmount(expense);
         ticketExpense.setCreatedAt(LocalDateTime.now());
-
         ticketExpenseService.save(ticketExpense);
 
         return "redirect:/employee/ticket/assigned-tickets";
@@ -230,6 +232,65 @@ public class TicketController {
         model.addAttribute("customers",customers);
         model.addAttribute("ticket", ticket);
         return "ticket/update-ticket";
+    }
+
+    @GetMapping("/update-ticketExpense/{id}")
+    public String showTicketExpenseUpdatingForm(Model model, @PathVariable("id") int id, Authentication authentication) {
+        int userId = authenticationUtils.getLoggedInUserId(authentication);
+        User loggedInUser = userService.findById(userId);
+        if(loggedInUser.isInactiveUser()) {
+            return "error/account-inactive";
+        }
+
+        TicketHisto ticketHisto = ticketHistoService.findByTicketHistoId(id);
+
+        if(ticketHisto == null) {
+            return "error/not-found";
+        }
+
+        User employee = ticketHisto.getEmployee();
+        if(!AuthorizationUtil.checkIfUserAuthorized(employee,loggedInUser) && !AuthorizationUtil.hasRole(authentication,"ROLE_MANAGER")) {
+            return "error/access-denied";
+        }
+
+        model.addAttribute("ticketHisto", ticketHisto);
+        return "ticket/update-ticketExpense";
+    }
+
+    @PostMapping("/update-ticketExpense")
+    public String updateTicketExpense(@RequestParam("ticketHistoId") int ticketHistoId,
+                                      @RequestParam("expense") BigDecimal expense,
+                                      Authentication authentication,
+                                      Model model) {
+        int userId = authenticationUtils.getLoggedInUserId(authentication);
+        User loggedInUser = userService.findById(userId);
+        if (loggedInUser.isInactiveUser()) {
+            return "error/account-inactive";
+        }
+
+        // Retrieve the associated TicketHisto
+        TicketHisto ticketHisto = ticketHistoService.findByTicketHistoId(ticketHistoId);
+        if (ticketHisto == null) {
+            return "error/not-found";
+        }
+
+        // Check permissions
+        User employee = ticketHisto.getEmployee();
+        if (!AuthorizationUtil.checkIfUserAuthorized(employee, loggedInUser) && !AuthorizationUtil.hasRole(authentication, "ROLE_MANAGER")) {
+            return "error/access-denied";
+        }
+
+        // Create a new expense
+        TicketExpense ticketExpense = new TicketExpense();
+        ticketExpense.setTicketHisto(ticketHisto);
+        ticketExpense.setAmount(expense);
+        ticketExpense.setCreatedAt(LocalDateTime.now());
+
+        // Save the new expense
+        ticketExpenseService.save(ticketExpense);
+
+        // Redirect to the assigned tickets page
+        return "redirect:/employee/ticket/assigned-tickets";
     }
 
     @PostMapping("/update-ticket")

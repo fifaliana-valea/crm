@@ -24,4 +24,7 @@ public class TicketHistoServiceImpl implements TicketHistoService{
         return ticketHistoRepository.findAll();
     }
 
+    @Override
+    public TicketHisto findByTicketHistoId(int id){return ticketHistoRepository.findById(id);};
+
 }

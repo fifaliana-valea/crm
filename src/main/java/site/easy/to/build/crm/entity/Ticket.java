@@ -64,6 +64,7 @@ public class Ticket {
 
     public static TicketHisto convertToTicketHisto(Ticket ticket) {
         TicketHisto ticketHisto = new TicketHisto();
+        ticketHisto.setId(ticket.getTicketId());
         ticketHisto.setSubject(ticket.getSubject());
         ticketHisto.setDescription(ticket.getDescription());
         ticketHisto.setStatus(ticket.getStatus());

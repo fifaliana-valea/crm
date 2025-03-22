@@ -8,4 +8,6 @@ public interface TicketHistoService {
     TicketHisto save(TicketHisto ticketHisto);
 
     List<TicketHisto> findAll();
+
+    TicketHisto findByTicketHistoId(int id);
 }

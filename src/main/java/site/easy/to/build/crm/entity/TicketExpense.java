@@ -29,7 +29,7 @@ public class TicketExpense {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "id_1", nullable = false)
+    @JoinColumn(name = "ticket_histo_id", nullable = false)
     private TicketHisto ticketHisto;
 
     // Getters and Setters
