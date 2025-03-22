@@ -3,9 +3,7 @@ package site.easy.to.build.crm.service.data;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class ConfigDataRepository {
     @PersistenceContext
     private EntityManager entityManager;
