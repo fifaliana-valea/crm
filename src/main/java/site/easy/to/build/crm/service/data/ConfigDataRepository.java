@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.repository;
+package site.easy.to.build.crm.service.data;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

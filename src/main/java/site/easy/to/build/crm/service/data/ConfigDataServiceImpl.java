@@ -1,7 +1,6 @@
 package site.easy.to.build.crm.service.data;
 
 import org.springframework.stereotype.Service;
-import site.easy.to.build.crm.repository.ConfigDataRepository;
 
 @Service
 public class ConfigDataServiceImpl implements ConfigDataService{
