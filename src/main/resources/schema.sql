@@ -261,11 +261,6 @@ CREATE TABLE IF NOT EXISTS `trigger_lead` (
 
 
 
---
--- Table structure for table `trigger_ticket`
---
-
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `trigger_ticket` (
@@ -450,10 +445,6 @@ CREATE TABLE IF NOT EXISTS `lead_settings` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
-
-
-
 --
 -- Table structure for table `ticket_settings`
 --
@@ -549,3 +540,38 @@ CREATE TABLE IF NOT EXISTS `budget`(
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+CREATE TABLE IF NOT EXISTS `trigger_lead_histo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT, -- Utiliser id comme clé primaire
+  `customer_id` int unsigned NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `employee_id` int DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `meeting_id` varchar(255) DEFAULT NULL,
+  `google_drive` tinyint(1) DEFAULT NULL,
+  `google_drive_folder_id` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `delete_at` datetime,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `meeting_info` (`meeting_id`),
+  KEY `fk_trigger_lead_histo_customer` (`customer_id`),
+  KEY `fk_trigger_lead_histo_user` (`user_id`),
+  KEY `fk_trigger_lead_histo_employee` (`employee_id`),
+  CONSTRAINT `fk_trigger_lead_histo_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  CONSTRAINT `fk_trigger_lead_histo_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_trigger_lead_histo_employee` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `lead_expense` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `amount` decimal(18,2) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `trigger_lead_histo_id` int unsigned NOT NULL, -- Renommer ticket_histo_id en trigger_lead_histo_id
+  PRIMARY KEY (`id`),
+  KEY `fk_lead_expense_histo` (`trigger_lead_histo_id`),
+  CONSTRAINT `fk_lead_expense_histo` FOREIGN KEY (`trigger_lead_histo_id`) REFERENCES `trigger_lead_histo` (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- Table structure for table `trigger_ticket`
+--
