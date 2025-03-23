@@ -19,6 +19,7 @@ public class LeadAction {
     @JoinColumn(name = "lead_id")
     private Lead lead;
 
+
     public LeadAction() {
     }
 
@@ -59,4 +60,5 @@ public class LeadAction {
     public void setLead(Lead lead) {
         this.lead = lead;
     }
+
 }
