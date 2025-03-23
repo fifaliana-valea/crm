@@ -1,7 +1,7 @@
-package site.easy.to.build.crm.util.csv;
+package site.easy.to.build.crm.import_csv;
 
-import site.easy.to.build.crm.util.csv.exception.CSVException;
-import site.easy.to.build.crm.util.csv.parameter.CellCSV;
+import site.easy.to.build.crm.import_csv.exception.CSVException;
+import site.easy.to.build.crm.import_csv.parameter.CellCSV;
 
 import java.util.Objects;
 
