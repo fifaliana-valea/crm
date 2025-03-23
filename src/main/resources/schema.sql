@@ -530,6 +530,14 @@ CREATE TABLE IF NOT EXISTS `google_drive_file` (
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+CREATE TABLE IF NOT EXISTS `budget`(
+   `id` INT AUTO_INCREMENT,
+   `amount` DECIMAL(18,2)   NOT NULL,
+  `created_at` DATE NOT NULL,
+  `customer_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(`customer_id`) REFERENCES customer(`customer_id`)
+  )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
