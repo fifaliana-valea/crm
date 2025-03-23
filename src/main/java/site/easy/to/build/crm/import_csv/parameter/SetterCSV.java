@@ -1,6 +1,6 @@
-package site.easy.to.build.crm.util.csv.parameter;
+package site.easy.to.build.crm.import_csv.parameter;
 
-import site.easy.to.build.crm.util.csv.LineValue;
+import site.easy.to.build.crm.import_csv.LineValue;
 
 @FunctionalInterface
 public interface SetterCSV<T> {
