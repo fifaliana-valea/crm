@@ -1,7 +1,7 @@
-package site.easy.to.build.crm.import_csv;
+package site.easy.to.build.crm.util.csv;
 
-import site.easy.to.build.crm.import_csv.exception.CSVException;
-import site.easy.to.build.crm.import_csv.parameter.CellCSV;
+import site.easy.to.build.crm.util.csv.exception.CSVException;
+import site.easy.to.build.crm.util.csv.parameter.CellCSV;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -127,7 +127,7 @@ public final class ConstraintCSV {
         public List<String> getValue(String cell,int line) throws CSVException {
             try{
                 List<String> value=new ArrayList<>();
-                String[] foreignKeySplitted=cell.split(",");
+                String[] foreignKeySplitted=cell.split(";");
                 for(String foreignKey:foreignKeySplitted){
                     value.add(foreignKey.replace(" ",""));
                 }
