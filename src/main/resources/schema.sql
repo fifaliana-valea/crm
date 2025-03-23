@@ -259,6 +259,8 @@ CREATE TABLE IF NOT EXISTS `trigger_lead` (
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
 --
 -- Table structure for table `trigger_ticket`
 --
