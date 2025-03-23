@@ -22,6 +22,7 @@ public class GoogleDriveFile {
     @JoinColumn(name = "lead_id")
     private Lead lead;
 
+
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private Contract contract;
@@ -80,4 +81,6 @@ public class GoogleDriveFile {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
+
+
 }

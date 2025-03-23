@@ -1,58 +1,62 @@
 package site.easy.to.build.crm.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "trigger_lead_histo")
 public class TriggerLeadHisto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private int leadId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @Column(name = "phone", nullable = false)
-    private String phone;
-
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
+    @NotBlank(message = "Status is required")
+    @Pattern(regexp = "^(meeting-to-schedule|scheduled|archived|success|assign-to-sales)$", message = "Invalid status")
     private String status;
 
-    @Column(name = "meeting_id", nullable = false, unique = true)
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "meeting_id")
     private String meetingId;
 
     @Column(name = "google_drive")
     private Boolean googleDrive;
 
-    @Column(name = "google_drive_folder_id")
-    private String googleDriveFolderId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User manager;
 
-    @Column(name = "delete_at")
-    private LocalDateTime deleteAt;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private User employee;
 
-    public TriggerLeadHisto(Integer id,String name, String phone, String status, 
-            String meetingId, Boolean googleDrive,
-            String googleDriveFolderId) {
-        this.id=id;
-        this.name = name;
-        this.phone = phone;
-        this.status = status;
-        this.meetingId = meetingId;
-        this.googleDrive = googleDrive;
-        this.googleDriveFolderId = googleDriveFolderId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    public TriggerLeadHisto() {
     }
 
-    // Getters et Setters
-    public Integer getId() {
-        return id;
+    public int getId() {
+        return leadId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(int leadId) {
+        this.leadId = leadId;
     }
 
     public String getName() {
@@ -63,14 +67,6 @@ public class TriggerLeadHisto {
         this.name = name;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -79,12 +75,16 @@ public class TriggerLeadHisto {
         this.status = status;
     }
 
-    public String getMeetingId() {
-        return meetingId;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setMeetingId(String meetingId) {
-        this.meetingId = meetingId;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getMeetingId() {
+        return meetingId;
     }
 
     public Boolean getGoogleDrive() {
@@ -95,19 +95,42 @@ public class TriggerLeadHisto {
         this.googleDrive = googleDrive;
     }
 
-    public String getGoogleDriveFolderId() {
-        return googleDriveFolderId;
+
+    public void setMeetingId(String meetingId) {
+        this.meetingId = meetingId;
     }
 
-    public void setGoogleDriveFolderId(String googleDriveFolderId) {
-        this.googleDriveFolderId = googleDriveFolderId;
+    public User getManager() {
+        return manager;
     }
 
-    public LocalDateTime getDeleteAt() {
-        return deleteAt;
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 
-    public void setDeleteAt(LocalDateTime deleteAt) {
-        this.deleteAt = deleteAt;
+    public User getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(User employee) {
+        this.employee = employee;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
+
+

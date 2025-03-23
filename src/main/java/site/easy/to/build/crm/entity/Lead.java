@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "trigger_lead")
 public class Lead {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lead_id")
@@ -79,6 +80,21 @@ public class Lead {
         this.employee = employee;
         this.customer = customer;
         this.createdAt = createdAt;
+    }
+
+    public static TriggerLeadHisto toTriggerLeadHisto(Lead lead) {
+        TriggerLeadHisto triggerLeadHisto = new TriggerLeadHisto();
+        triggerLeadHisto.setId(lead.leadId); // Si l'ID est différent, ajustez-le
+        triggerLeadHisto.setName(lead.name);
+        triggerLeadHisto.setStatus(lead.status);
+        triggerLeadHisto.setPhone(lead.phone);
+        triggerLeadHisto.setMeetingId(lead.meetingId);
+        triggerLeadHisto.setGoogleDrive(lead.googleDrive);
+        triggerLeadHisto.setManager(lead.manager);
+        triggerLeadHisto.setEmployee(lead.employee);
+        triggerLeadHisto.setCustomer(lead.customer);
+        triggerLeadHisto.setCreatedAt(lead.createdAt);
+        return triggerLeadHisto;
     }
 
     public int getLeadId() {
