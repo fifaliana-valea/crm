@@ -122,12 +122,20 @@ public class SecurityConfig {
         httpSessionCsrfTokenRepository.setParameterName("csrf");
 
         http.csrf((csrf) -> csrf
-                .csrfTokenRepository(httpSessionCsrfTokenRepository));
+                .csrfTokenRepository(httpSessionCsrfTokenRepository)
+                .ignoringRequestMatchers("/api/tickets/**")
+                .ignoringRequestMatchers("/api/ticket-expenses/**")
+                .ignoringRequestMatchers("/api/rate-configs/**")
+        );
+
 
         http.securityMatcher("/customer-login/**").authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/set-password/**").permitAll()
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
+                        .requestMatchers("/api/tickets/**").permitAll()
+                        .requestMatchers("/api/ticket-expenses/**").permitAll()
+                        .requestMatchers("/api/rate-configs/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
