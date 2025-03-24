@@ -143,17 +143,31 @@
                 </li>
                 <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Data Configuration</li>
                 <li>
-                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
-                        <i class="fas fa-ticket-alt"></i>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-cogs"></i> <!-- Nouvelle icône principale -->
                         <span class="hide-menu">Data Configuration</span>
                     </a>
                     <ul class="collapse">
-                        <li><a th:href="${home + 'data/config/resetData'}">Reset Data</a></li>
-                        <li><a th:href="${home + 'employee/ticket/create-ticket'}">Import CSV</a></li>
-                        <li><a th:href="${home + 'employee/ticket/create-ticket'}">Generate Data</a></li>
+                        <li>
+                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'data/config/resetData'}">
+                                <i class="fas fa-sync"></i> <!-- Icône pour "Reset Data" -->
+                                <span class="hide-menu">Reset Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'employee/ticket/create-ticket'}">
+                                <i class="fas fa-file-import"></i> <!-- Icône pour "Import CSV" -->
+                                <span class="hide-menu">Import CSV</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'employee/ticket/create-ticket'}">
+                                <i class="fas fa-database"></i> <!-- Icône pour "Generate Data" -->
+                                <span class="hide-menu">Generate Data</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-
                 <li class="nav-small-cap">--- Email Templates</li>
                 <li>
                     <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
@@ -221,6 +235,23 @@
                         <i class="fas fa-file-contract"></i>
                         <span class="hide-menu">My Contracts</span>
                     </a>
+                </li>
+                <li th:if="${#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}" class="nav-small-cap">--- Budget</li>
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-money-bill"></i>
+                        <span class="hide-menu">Budget</span>
+                    </a>
+                    <ul class="collapse">
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}" class="waves-effect waves-dark" th:href="${home + 'customer/budget/create'}">
+                            <i class="fas fa-plus"></i>
+                            <span class="hide-menu">Add budget</span>
+                        </a></li>
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}" class="waves-effect waves-dark" th:href="${home + 'customer/budget/my-budgets'}">
+                            <i class="fas fa-list"></i>
+                            <span class="hide-menu">My budgets</span>
+                        </a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>

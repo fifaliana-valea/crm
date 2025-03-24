@@ -1,6 +1,5 @@
 package site.easy.to.build.crm.import_csv.parameter;
 
-
 import site.easy.to.build.crm.import_csv.LineValue;
 
 @FunctionalInterface
