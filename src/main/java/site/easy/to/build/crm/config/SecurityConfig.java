@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,19 +30,12 @@ import site.easy.to.build.crm.config.oauth2.OAuthLoginSuccessHandler;
 public class SecurityConfig {
 
     private final OAuthLoginSuccessHandler oAuth2LoginSuccessHandler;
-
     private final CustomOAuth2UserService oauthUserService;
-
     private final CrmUserDetails crmUserDetails;
-
     private final CustomerUserDetails customerUserDetails;
-
     private final Environment environment;
-
     private final JWTFilter jwtFilter;
-
     private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
-
     private final ApiUserDetails apiUserDetails;
 
     @Autowired
@@ -64,28 +58,18 @@ public class SecurityConfig {
     @Order(3)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-        httpSessionCsrfTokenRepository.setParameterName("csrf");
+        HttpSessionCsrfTokenRepository csrfRepo = new HttpSessionCsrfTokenRepository();
+        csrfRepo.setParameterName("csrf");
 
-        http.csrf((csrf) -> csrf
-                .csrfTokenRepository(httpSessionCsrfTokenRepository)
-                .ignoringRequestMatchers("/api/tickets/**")
-                .ignoringRequestMatchers("/api/ticket-expenses/**")
-                .ignoringRequestMatchers("/api/rate-configs/**")
-        );
+        http.csrf(csrf -> csrf.csrfTokenRepository(csrfRepo));
 
-
-        http.authorizeHttpRequests((authorize) -> authorize
-
+        http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/set-employee-password/**").permitAll()
                         .requestMatchers("/change-password/**").permitAll()
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/tickets/**").permitAll()
-                        .requestMatchers("/api/ticket-expenses/**").permitAll()
-                        .requestMatchers("/api/rate-configs/**").permitAll()
                         .requestMatchers("/save").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
@@ -94,7 +78,7 @@ public class SecurityConfig {
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated())
 
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)
@@ -103,16 +87,14 @@ public class SecurityConfig {
                 .userDetailsService(crmUserDetails)
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oauthUserService))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(oauthUserService))
                         .successHandler(oAuth2LoginSuccessHandler))
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .permitAll())
-                .exceptionHandling(exception -> {
-                    exception.accessDeniedHandler(accessDeniedHandler());
-                });
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler()));
 
         return http.build();
     }
@@ -125,16 +107,13 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain customerSecurityFilterChain(HttpSecurity http) throws Exception {
+        HttpSessionCsrfTokenRepository csrfRepo = new HttpSessionCsrfTokenRepository();
+        csrfRepo.setParameterName("csrf");
 
-        HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-        httpSessionCsrfTokenRepository.setParameterName("csrf");
+        http.csrf(csrf -> csrf.csrfTokenRepository(csrfRepo));
 
-        http.csrf((csrf) -> csrf
-                .csrfTokenRepository(httpSessionCsrfTokenRepository)
-        );
-
-
-        http.securityMatcher("/customer-login/**").authorizeHttpRequests((authorize) -> authorize
+        http.securityMatcher("/customer-login/**")
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/set-password/**").permitAll()
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
@@ -143,14 +122,14 @@ public class SecurityConfig {
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/**/manager/**")).hasRole("MANAGER")
                         .anyRequest().authenticated())
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage("/customer-login")
                         .loginProcessingUrl("/customer-login")
                         .failureUrl("/customer-login")
                         .defaultSuccessUrl("/", true)
                         .permitAll())
                 .userDetailsService(customerUserDetails)
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/customer-login")
                         .permitAll());
@@ -159,23 +138,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/**") // Isole les routes API
-                .csrf(csrf -> csrf.disable()) // Désactive CSRF pour les appels API (JSON)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityMatcher("/api/**")
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers(
+                                "/api/login",
+                                "/api/tickets/**",
+                                "/api/rate-configs/**",
+                                "/api/ticket-expenses/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
-                .formLogin(AbstractHttpConfigurer::disable) // Désactive le formulaire HTML
-                .httpBasic(AbstractHttpConfigurer::disable) // Désactive l’auth basic
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setContentType("application/json");
@@ -188,7 +166,6 @@ public class SecurityConfig {
                             response.getWriter().write("{\"error\": \"Access Denied\"}");
                         }))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        ;
 
         return http.build();
     }
@@ -201,5 +178,20 @@ public class SecurityConfig {
                 .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers(
+                        "/api/tickets/**",
+                        "/api/rate-configs/**",
+                        "/api/ticket-expenses/**"
+                );
     }
 }
