@@ -62,6 +62,20 @@ public class Ticket {
         this.createdAt = createdAt;
     }
 
+    public static TicketHisto convertToTicketHisto(Ticket ticket) {
+        TicketHisto ticketHisto = new TicketHisto();
+        ticketHisto.setId(ticket.getTicketId());
+        ticketHisto.setSubject(ticket.getSubject());
+        ticketHisto.setDescription(ticket.getDescription());
+        ticketHisto.setStatus(ticket.getStatus());
+        ticketHisto.setPriority(ticket.getPriority());
+        ticketHisto.setManager(ticket.getManager());
+        ticketHisto.setEmployee(ticket.getEmployee());
+        ticketHisto.setCustomer(ticket.getCustomer());
+        ticketHisto.setCreatedAt(ticket.getCreatedAt());
+        return ticketHisto;
+    }
+
     public int getTicketId() {
         return ticketId;
     }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import site.easy.to.build.crm.repository.CustomerRepository;
 import site.easy.to.build.crm.entity.Customer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -51,6 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getRecentCustomers(int userId, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
         return customerRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+    }
+
+
+    @Override
+    public List<Customer> getBetweenDate(LocalDateTime date1, LocalDateTime date2) {
+        return customerRepository.getBetweenDate(date1, date2);
     }
 
     @Override

@@ -135,7 +135,10 @@ public class GoogleApiHelper {
             for (Part part : parts) {
                 String partMimeType = part.getMimeType();
                 if (partMimeType.equals("text/plain")) {
-                    byte[] data = decoder.decode(part.getBody().getData());
+//                    byte[] data = decoder.decode(part.getBody().getData());
+                    byte[] data = part.getBody() != null && part.getBody().getData() != null
+                            ? decoder.decode(part.getBody().getData())
+                            : new byte[0];
                     plainTextBody = new String(data, StandardCharsets.UTF_8);
                 } else if (partMimeType.equals("text/html")) {
                     byte[] data = decoder.decode(part.getBody().getData());
