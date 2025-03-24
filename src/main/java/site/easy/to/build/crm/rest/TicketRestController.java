@@ -40,12 +40,15 @@ public class TicketRestController {
     public ResponseEntity<String> deleteTicket(@PathVariable("id") int id) {
         try {
             Ticket ticket = ticketService.findByTicketId(id);
+            TicketHisto ticketHisto = ticketHistoService.findByTicketHistoId(id);
 
             if (ticket == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket non trouvé avec l'ID : " + id);
             }
 
             ticketService.delete(ticket);
+            ticketHisto.setDeleteAt(LocalDateTime.now());
+            ticketHistoService.save(ticketHisto);
 
             return ResponseEntity.ok("Ticket supprimé avec succès.");
         } catch (Exception ex) {
