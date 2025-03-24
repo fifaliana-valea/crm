@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface TriggerLeadHistoRepository extends JpaRepository<TriggerLeadHisto, Long> {
 
+    List<TriggerLeadHisto> findByCustomerCustomerId(int idCustomer);
     @Query("SELECT t FROM TriggerLeadHisto t " +
             "WHERE (:date1 IS NULL OR t.createdAt >= :date1) " +
             "AND (:date2 IS NULL OR t.createdAt <= :date2)")

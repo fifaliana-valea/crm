@@ -575,3 +575,12 @@ CREATE TABLE IF NOT EXISTS `lead_expense` (
 --
 -- Table structure for table `trigger_ticket`
 --
+CREATE TABLE IF NOT EXISTS rate_config(
+id INT AUTO_INCREMENT,
+rate DECIMAL(15,2)   NOT NULL,
+created_at DATE NOT NULL,
+PRIMARY KEY(id)
+);
+
+INSERT INTO rate_config (rate, created_at) VALUES
+  (80.00, '2023-10-01');
