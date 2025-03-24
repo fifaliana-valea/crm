@@ -15,7 +15,11 @@ public interface TicketHistoRepository extends JpaRepository<TicketHisto, Intege
     public TicketHisto findById(int ticketId);
 
     @Query("SELECT t FROM TicketHisto t " +
-            "WHERE (:date1 IS NULL OR t.createdAt >= :date1) " +
+            "WHERE t.deleteAt IS NULL " +
+            "AND (:date1 IS NULL OR t.createdAt >= :date1) " +
             "AND (:date2 IS NULL OR t.createdAt <= :date2)")
-    List<TicketHisto> getBetweenDate(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
+    List<TicketHisto> getBetweenDate(
+            @Param("date1") LocalDateTime date1,
+            @Param("date2") LocalDateTime date2);
+
 }
