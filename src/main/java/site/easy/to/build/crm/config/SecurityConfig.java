@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .csrfTokenRepository(httpSessionCsrfTokenRepository)
                 .ignoringRequestMatchers("/api/ticket-expenses/**")
                 .ignoringRequestMatchers("/api/tickets/**")
+                .ignoringRequestMatchers("/api/rate-configs/**")
         );
 
         http.
@@ -67,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/change-password/**").permitAll()
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/api/tickets/**").permitAll()
+                        .requestMatchers("/api/rate-configs/**").permitAll()
                         .requestMatchers("/api/ticket-expenses/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
                         .requestMatchers("/images/**").permitAll()

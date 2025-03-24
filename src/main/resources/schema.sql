@@ -581,6 +581,3 @@ rate DECIMAL(15,2)   NOT NULL,
 created_at DATE NOT NULL,
 PRIMARY KEY(id)
 );
-
-INSERT INTO rate_config (rate, created_at) VALUES
-  (80.00, '2023-10-01');

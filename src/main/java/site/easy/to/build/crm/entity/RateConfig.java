@@ -20,7 +20,7 @@ public class RateConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int budgetId;
+    private int id;
 
     @Column(name = "rate", nullable = false, precision = 10, scale = 2)
     @NotNull(message = "Rate is required")
@@ -36,7 +36,7 @@ public class RateConfig {
     public RateConfig(int budgetId,
             @NotNull(message = "Rate is required") @Digits(integer = 10, fraction = 2, message = "Rate must be a valid number with up to 2 decimal places") @DecimalMin(value = "0.00", inclusive = true, message = "Rate must be greater than or equal to 0.00") @DecimalMax(value = "9999999.99", inclusive = true, message = "Rate must be less than or equal to 9999999.99") BigDecimal rate,
             @NotNull(message = "Date is required") LocalDate createdAt) {
-        this.budgetId = budgetId;
+        this.id = budgetId;
         this.rate = rate;
         this.createdAt = createdAt;
     }
@@ -44,12 +44,12 @@ public class RateConfig {
     public RateConfig() {
     }
 
-    public int getBudgetId() {
-        return budgetId;
+    public int getId() {
+        return id;
     }
 
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
+    public void setId(int budgetId) {
+        this.id = budgetId;
     }
 
     public BigDecimal getRate() {
