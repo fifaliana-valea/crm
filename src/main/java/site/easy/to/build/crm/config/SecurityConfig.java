@@ -68,7 +68,12 @@ public class SecurityConfig {
         httpSessionCsrfTokenRepository.setParameterName("csrf");
 
         http.csrf((csrf) -> csrf
-                .csrfTokenRepository(httpSessionCsrfTokenRepository));
+                .csrfTokenRepository(httpSessionCsrfTokenRepository)
+                .ignoringRequestMatchers("/api/tickets/**")
+                .ignoringRequestMatchers("/api/ticket-expenses/**")
+                .ignoringRequestMatchers("/api/rate-configs/**")
+        );
+
 
         http.authorizeHttpRequests((authorize) -> authorize
 
@@ -78,6 +83,9 @@ public class SecurityConfig {
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/api/tickets/**").permitAll()
+                        .requestMatchers("/api/ticket-expenses/**").permitAll()
+                        .requestMatchers("/api/rate-configs/**").permitAll()
                         .requestMatchers("/save").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
@@ -123,9 +131,6 @@ public class SecurityConfig {
 
         http.csrf((csrf) -> csrf
                 .csrfTokenRepository(httpSessionCsrfTokenRepository)
-                .ignoringRequestMatchers("/api/tickets/**")
-                .ignoringRequestMatchers("/api/ticket-expenses/**")
-                .ignoringRequestMatchers("/api/rate-configs/**")
         );
 
 
@@ -133,9 +138,6 @@ public class SecurityConfig {
                         .requestMatchers("/set-password/**").permitAll()
                         .requestMatchers("/font-awesome/**").permitAll()
                         .requestMatchers("/fonts/**").permitAll()
-                        .requestMatchers("/api/tickets/**").permitAll()
-                        .requestMatchers("/api/ticket-expenses/**").permitAll()
-                        .requestMatchers("/api/rate-configs/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
