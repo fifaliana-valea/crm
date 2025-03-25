@@ -11,9 +11,7 @@ import site.easy.to.build.crm.import_csv.parameter.SetterCSV;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CSVFile<T> {
@@ -50,7 +48,7 @@ public class CSVFile<T> {
             List<String> headers = csvParser.getHeaderNames();
             setHeaders(headers);
 
-            int line=0;
+            int line=2;
             // Iterate through the CSV records
             for (CSVRecord record : csvParser) {
                 try{
@@ -112,8 +110,17 @@ public class CSVFile<T> {
         }
     }
 
+    public List<T> getData() {
+        return Collections.unmodifiableList(data);
+    }
+
+    public List<String> getErrors() {
+        return Collections.unmodifiableList(errors);
+    }
+
     public CSVFile<T> addConstraint(String header, CellCSV constraintColumn) {
         this.headerCSVs.add(new HeaderCSV(header, constraintColumn));
         return this;
     }
+
 }

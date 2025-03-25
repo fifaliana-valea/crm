@@ -23,10 +23,10 @@ public class TriggerLeadHistoServiceImpl implements TriggerLeadHistoService {
         return triggerLeadHistoRepository.save(triggerLeadHisto);
     }
 
-    // @Override
-    // public List<TriggerLeadHisto> getTriggerLeadHistoBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
-    //     return triggerLeadHistoRepository.findBetweenDate(startDate, endDate);
-    // }
+     @Override
+     public List<TriggerLeadHisto> getTriggerLeadHistoBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+         return triggerLeadHistoRepository.getBetweenDate(startDate, endDate);
+     }
     @Override
     public List<TriggerLeadHisto> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate) {
         return triggerLeadHistoRepository.findByCreatedAtBetween(startDate, endDate);

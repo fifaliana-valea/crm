@@ -8,6 +8,8 @@ public interface TriggerLeadHistoService {
 
     // public List<TriggerLeadHisto> getTriggerLeadHistoBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
 
+    List<TriggerLeadHisto> getTriggerLeadHistoBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
+
     public List<TriggerLeadHisto> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     TriggerLeadHisto getById(Integer id);
