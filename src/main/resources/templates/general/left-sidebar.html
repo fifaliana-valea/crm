@@ -155,15 +155,9 @@
                             </a>
                         </li>
                         <li>
-                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'employee/ticket/create-ticket'}">
+                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'data/config/import-csv'}">
                                 <i class="fas fa-file-import"></i> <!-- Icône pour "Import CSV" -->
                                 <span class="hide-menu">Import CSV</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" th:href="${home + 'employee/ticket/create-ticket'}">
-                                <i class="fas fa-database"></i> <!-- Icône pour "Generate Data" -->
-                                <span class="hide-menu">Generate Data</span>
                             </a>
                         </li>
                     </ul>
