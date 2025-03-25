@@ -10,7 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "trigger_lead")
 public class Lead {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lead_id")
@@ -219,5 +218,3 @@ public class Lead {
         this.createdAt = createdAt;
     }
 }
-
-
