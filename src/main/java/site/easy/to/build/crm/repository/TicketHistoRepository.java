@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import site.easy.to.build.crm.entity.Ticket;
 import site.easy.to.build.crm.entity.TicketHisto;
+import site.easy.to.build.crm.entity.TriggerLeadHisto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,5 +24,6 @@ public interface TicketHistoRepository extends JpaRepository<TicketHisto, Intege
             @Param("date1") LocalDateTime date1,
             @Param("date2") LocalDateTime date2);
 
+    List<TicketHisto> findByDeleteAtIsNull();
     public List<TicketHisto> findByCustomerCustomerId(int customerId);
 }
