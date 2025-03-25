@@ -147,6 +147,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/login",
+                                "/api/lead-expenses/**",
+                                "/api/leads/**",
                                 "/api/tickets/**",
                                 "/api/rate-configs/**",
                                 "/api/ticket-expenses/**"
@@ -190,6 +192,8 @@ public class SecurityConfig {
         return web -> web.ignoring()
                 .requestMatchers(
                         "/api/tickets/**",
+                        "/api/lead-expenses/**",
+                        "/api/leads/**",
                         "/api/rate-configs/**",
                         "/api/ticket-expenses/**"
                 );
