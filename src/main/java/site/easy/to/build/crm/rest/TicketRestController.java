@@ -61,7 +61,7 @@ public class TicketRestController {
             @RequestParam(required = false) LocalDateTime date1,
             @RequestParam(required = false) LocalDateTime date2
     ) {
-        List<TicketHisto> ticketHistos = ticketHistoService.getBetweenDate(date1, date2);
+        List<TicketHisto> ticketHistos = ticketHistoService.getAll();
         return ResponseEntity.ok(ticketHistos);
     }
 }

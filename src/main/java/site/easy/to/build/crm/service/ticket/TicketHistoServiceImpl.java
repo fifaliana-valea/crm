@@ -16,6 +16,11 @@ public class TicketHistoServiceImpl implements TicketHistoService{
     }
 
     @Override
+    public List<TicketHisto> getAll() {
+        return ticketHistoRepository.findByDeleteAtIsNull();
+    }
+
+    @Override
     public List<TicketHisto> getBetweenDate(LocalDateTime date1, LocalDateTime date2){
         return ticketHistoRepository.getBetweenDate(date1,date2);
     }
