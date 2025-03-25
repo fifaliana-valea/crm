@@ -2,6 +2,7 @@ package site.easy.to.build.crm.rest;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.easy.to.build.crm.entity.TicketExpense;
@@ -37,6 +38,15 @@ public class TicketExpenseRestController {
         }
     }
 
+
+    @GetMapping("/total")
+    public ResponseEntity<BigDecimal> getTotalExpenses(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        BigDecimal total = ticketExpenseService.getTotalExpensesBetweenDates(startDate, endDate);
+        return ResponseEntity.ok(total);
+    }
 
 
     // Mettre à jour une dépense

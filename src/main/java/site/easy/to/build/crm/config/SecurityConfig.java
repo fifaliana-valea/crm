@@ -150,6 +150,7 @@ public class SecurityConfig {
                                 "/api/lead-expenses/**",
                                 "/api/leads/**",
                                 "/api/tickets/**",
+                                "/api/budget/**",
                                 "/api/rate-configs/**",
                                 "/api/ticket-expenses/**"
                         ).permitAll()
@@ -194,6 +195,7 @@ public class SecurityConfig {
                         "/api/tickets/**",
                         "/api/lead-expenses/**",
                         "/api/leads/**",
+                        "/api/budget/**",
                         "/api/rate-configs/**",
                         "/api/ticket-expenses/**"
                 );

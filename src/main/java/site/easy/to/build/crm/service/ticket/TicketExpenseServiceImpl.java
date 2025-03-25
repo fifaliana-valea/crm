@@ -1,12 +1,11 @@
 package site.easy.to.build.crm.service.ticket;
 
 import org.springframework.stereotype.Service;
-import site.easy.to.build.crm.entity.Ticket;
 import site.easy.to.build.crm.entity.TicketExpense;
 import site.easy.to.build.crm.repository.TicketExpenseRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +15,11 @@ public class TicketExpenseServiceImpl implements TicketExpenseService{
 
     public TicketExpenseServiceImpl(TicketExpenseRepository ticketExpenseRepository) {
         this.ticketExpenseRepository = ticketExpenseRepository;
+    }
+
+    @Override
+    public BigDecimal getTotalExpensesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+        return ticketExpenseRepository.sumAmountBetweenDates(startDate, endDate);
     }
 
 
