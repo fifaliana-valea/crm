@@ -1,12 +1,12 @@
 package site.easy.to.build.crm.service.lead;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import site.easy.to.build.crm.entity.Lead;
 import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.repository.LeadExpenseRepository;
 @Service
@@ -17,6 +17,27 @@ public class LeadExpenseServiceImpl implements LeadExpenseService{
         this.leadExpenseRepository = leadExpenseRepository;
     }
 
+
+    @Override
+    public BigDecimal getTotalExpensesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
+        // Si les deux dates sont null, on retourne la somme totale
+        if (startDate == null && endDate == null) {
+            return leadExpenseRepository.sumAmountBetweenDates(null, null);
+        }
+
+        // Si seule la date de fin est null, on prend tout depuis startDate
+        if (endDate == null) {
+            return leadExpenseRepository.sumAmountBetweenDates(startDate, null);
+        }
+
+        // Si seule la date de début est null, on prend tout jusqu'à endDate
+        if (startDate == null) {
+            return leadExpenseRepository.sumAmountBetweenDates(null, endDate);
+        }
+
+        // Les deux dates sont renseignées
+        return leadExpenseRepository.sumAmountBetweenDates(startDate, endDate);
+    }
     @Override
     public LeadExpense save(LeadExpense leadExpense) {
         return leadExpenseRepository.save(leadExpense);
