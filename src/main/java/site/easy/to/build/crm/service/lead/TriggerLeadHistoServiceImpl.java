@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import site.easy.to.build.crm.entity.TicketHisto;
 import site.easy.to.build.crm.entity.TriggerLeadHisto;
 import site.easy.to.build.crm.repository.TriggerLeadHistoRepository;
 
@@ -31,6 +32,7 @@ public class TriggerLeadHistoServiceImpl implements TriggerLeadHistoService {
     public List<TriggerLeadHisto> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate) {
         return triggerLeadHistoRepository.findByCreatedAtBetween(startDate, endDate);
     }
+
 
     @Override
     public TriggerLeadHisto getById(Integer id) {
