@@ -40,9 +40,24 @@ public class LeadExpenseRestController {
         Optional<LeadExpense> expense = Optional.ofNullable(leadExpenseService.findById(id));
         return expense.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @GetMapping("/total")
+    public ResponseEntity<BigDecimal> getTotalExpenses(){
+
+        List<TriggerLeadHisto> triggerLeadHistos = triggerLeadHistoService.getAll();
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (TriggerLeadHisto triggerLead : triggerLeadHistos) {
+            LeadExpense latestExpense = leadExpenseService.findLatestByTriggerLeadHistoId(triggerLead.getId());
+            if (latestExpense != null && latestExpense.getAmount() != null) {
+                total = total.add(latestExpense.getAmount());
+            }
+        }
+
+        return ResponseEntity.ok(total);
+    }
 
     @GetMapping("/total")
-    public ResponseEntity<BigDecimal> getTotalExpenses(
+    public ResponseEntity<BigDecimal> getTotalDateExpenses(
             @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
             LocalDateTime startDate,
@@ -51,7 +66,7 @@ public class LeadExpenseRestController {
             @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
             LocalDateTime endDate) {
 
-        List<TriggerLeadHisto> triggerLeadHistos = triggerLeadHistoService.getTriggerLeadHistoBetweenDates(startDate, endDate);
+        List<TriggerLeadHisto> triggerLeadHistos = triggerLeadHistoService.getTriggerLeadHistoBetweenDates(startDate,endDate);
         BigDecimal total = BigDecimal.ZERO;
 
         for (TriggerLeadHisto triggerLead : triggerLeadHistos) {

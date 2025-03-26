@@ -41,6 +41,7 @@ public class BudgetService {
         return budget;
     }
 
+    public List<Budget> findAll() { return budgetRepository.findAll();}
     public List<Budget> getCustomerBudgets(int customerId) {
         return budgetRepository.findByCustomerCustomerId(customerId);
     }
@@ -48,6 +49,7 @@ public class BudgetService {
     public List<Budget> getTriggerLeadHistoBetweenDates(LocalDate startDate, LocalDate endDate) {
         return budgetRepository.findBudgetsBetweenDates(startDate, endDate);
     }
+
 
     public BigDecimal getTotalCustomerBudgets(int customerId) {
         List<Budget> budgets = getCustomerBudgets(customerId);

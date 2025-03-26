@@ -12,6 +12,7 @@ import site.easy.to.build.crm.entity.Budget;
 public interface BudgetRepository extends JpaRepository<Budget, Integer> {
     public List<Budget> findByCustomerCustomerId(int customerId);
 
+    public List<Budget> findAll();
     @Query("SELECT b FROM Budget b " +
             "WHERE (:startDate IS NULL AND :endDate IS NULL) " +  // Si les deux dates sont null
             "OR (b.createdAt BETWEEN COALESCE(:startDate, b.createdAt) AND COALESCE(:endDate, b.createdAt))")

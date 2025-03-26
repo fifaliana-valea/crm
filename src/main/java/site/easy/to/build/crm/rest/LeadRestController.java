@@ -22,6 +22,7 @@ public class LeadRestController {
 
     private final TriggerLeadHistoService leadService;
     private final LeadService leadService2;
+
     @Autowired
     public LeadRestController(TriggerLeadHistoService leadService,LeadService leadService2) {
         this.leadService = leadService;
