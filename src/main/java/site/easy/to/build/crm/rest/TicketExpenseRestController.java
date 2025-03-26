@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.entity.TicketExpense;
+import site.easy.to.build.crm.entity.TicketHisto;
+import site.easy.to.build.crm.entity.TriggerLeadHisto;
 import site.easy.to.build.crm.service.ticket.TicketExpenseService;
+import site.easy.to.build.crm.service.ticket.TicketHistoService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/ticket-expenses")
@@ -17,6 +22,9 @@ public class TicketExpenseRestController {
 
     @Autowired
     private TicketExpenseService ticketExpenseService;
+
+    @Autowired
+    private TicketHistoService ticketHistoService;
 
     // Récupérer une dépense par son ID
     @GetMapping("/{id}")
@@ -38,10 +46,24 @@ public class TicketExpenseRestController {
 
     @GetMapping("/total")
     public ResponseEntity<BigDecimal> getTotalExpenses(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
+            LocalDateTime startDate,
 
-        BigDecimal total = ticketExpenseService.getTotalExpensesBetweenDates(startDate, endDate);
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
+            LocalDateTime endDate) {
+
+        List<TicketHisto> triggerLeadHistos = ticketHistoService.getBetweenDate(startDate, endDate);
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (TicketHisto triggerLead : triggerLeadHistos) {
+            TicketExpense latestExpense = ticketExpenseService.getLatestExpenseForTicketHisto(triggerLead.getId());
+            if (latestExpense != null && latestExpense.getAmount() != null) {
+                total = total.add(latestExpense.getAmount());
+            }
+        }
+
         return ResponseEntity.ok(total);
     }
 
