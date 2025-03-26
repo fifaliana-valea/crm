@@ -22,20 +22,32 @@ public class BudgetRestController {
         this.budgetService = budgetService;
     }
 
+//    @GetMapping("/condition")
+//    public ResponseEntity<List<Budget>> getBudgetsBetweenDates(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2) {
+//        try {
+//            if (date1 == null || date2 == null) {
+//                throw new IllegalArgumentException("Les deux dates sont requises");
+//            }
+//
+//            if (date1.isAfter(date2)) {
+//                throw new IllegalArgumentException("La date de début doit être avant la date de fin");
+//            }
+//
+//            List<Budget> budgets = budgetService.getTriggerLeadHistoBetweenDates(date1, date2);
+//            return ResponseEntity.ok(budgets);
+//        }catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().build();
+//        }
+//    }
+
     @GetMapping("/condition")
-    public ResponseEntity<List<Budget>> getBudgetsBetweenDates(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2) {
+    public ResponseEntity<List<Budget>> getBudgetsBetweenDates() {
         try {
-            if (date1 == null || date2 == null) {
-                throw new IllegalArgumentException("Les deux dates sont requises");
-            }
-
-            if (date1.isAfter(date2)) {
-                throw new IllegalArgumentException("La date de début doit être avant la date de fin");
-            }
-
-            List<Budget> budgets = budgetService.getTriggerLeadHistoBetweenDates(date1, date2);
+            List<Budget> budgets = budgetService.findAll();
             return ResponseEntity.ok(budgets);
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

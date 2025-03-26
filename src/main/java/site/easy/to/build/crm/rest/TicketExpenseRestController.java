@@ -43,9 +43,25 @@ public class TicketExpenseRestController {
         }
     }
 
+    @GetMapping("/total")
+    public ResponseEntity<BigDecimal> getTotalExpenses(){
+
+        List<TicketHisto> triggerLeadHistos = ticketHistoService.getAll();
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (TicketHisto triggerLead : triggerLeadHistos) {
+            TicketExpense latestExpense = ticketExpenseService.getLatestExpenseForTicketHisto(triggerLead.getId());
+            if (latestExpense != null && latestExpense.getAmount() != null) {
+                total = total.add(latestExpense.getAmount());
+            }
+        }
+
+        return ResponseEntity.ok(total);
+    }
+
 
     @GetMapping("/total")
-    public ResponseEntity<BigDecimal> getTotalExpenses(
+    public ResponseEntity<BigDecimal> getTotalDateExpenses(
             @RequestParam(required = false)
             @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
             LocalDateTime startDate,
@@ -54,7 +70,7 @@ public class TicketExpenseRestController {
             @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
             LocalDateTime endDate) {
 
-        List<TicketHisto> triggerLeadHistos = ticketHistoService.getBetweenDate(startDate, endDate);
+        List<TicketHisto> triggerLeadHistos = ticketHistoService.getBetweenDate(startDate,endDate);
         BigDecimal total = BigDecimal.ZERO;
 
         for (TicketHisto triggerLead : triggerLeadHistos) {

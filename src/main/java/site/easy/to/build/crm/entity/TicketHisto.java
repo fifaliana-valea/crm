@@ -23,7 +23,7 @@ public class TicketHisto {
 
     @Column(name = "status")
     @NotBlank(message = "Status is required")
-    @Pattern(regexp = "^(open|assigned|on-hold|in-progress|resolved|closed|reopened|pending-customer-response|escalated|archived)$", message = "Invalid status")
+    @Pattern(regexp = "^(meeting-to-schedule|open|assigned|on-hold|in-progress|resolved|closed|reopened|pending-customer-response|escalated|archived)$", message = "Invalid status")
     private String status;
 
     @Column(name = "priority")

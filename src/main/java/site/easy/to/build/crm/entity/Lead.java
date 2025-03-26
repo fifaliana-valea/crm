@@ -21,7 +21,7 @@ public class Lead {
 
     @Column(name = "status")
     @NotBlank(message = "Status is required")
-    @Pattern(regexp = "^(meeting-to-schedule|scheduled|archived|success|assign-to-sales)$", message = "Invalid status")
+    @Pattern(regexp = "^(meeting-to-schedule|open|scheduled|archived|success|assign-to-sales)$", message = "Invalid status")
     private String status;
 
     @Column(name = "phone")
