@@ -19,7 +19,7 @@ public class TicketExpenseServiceImpl implements TicketExpenseService{
 
     @Override
     public BigDecimal getTotalExpensesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
-        return ticketExpenseRepository.sumAmountBetweenDates(startDate, endDate);
+        return ticketExpenseRepository.getTotalLatestExpenseBetweenDates(startDate, endDate);
     }
 
 

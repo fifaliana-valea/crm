@@ -5,6 +5,7 @@ import site.easy.to.build.crm.entity.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface CustomerService {
 
@@ -20,7 +21,7 @@ public interface CustomerService {
 
     public void delete(Customer customer);
 
-    List<String> findAllEmails();
+    Set<String> findAllEmails();
 
     public List<Customer> getRecentCustomers(int userId, int limit);
 

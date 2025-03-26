@@ -1,7 +1,6 @@
 package site.easy.to.build.crm.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +8,7 @@ import site.easy.to.build.crm.Dto.LeadExpenseUpdateDto;
 import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.entity.TriggerLeadHisto;
 import site.easy.to.build.crm.service.lead.LeadExpenseService;
+import site.easy.to.build.crm.service.lead.TriggerLeadHistoService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,10 +20,12 @@ import java.util.Optional;
 public class LeadExpenseRestController {
 
     private final LeadExpenseService leadExpenseService;
+    private final TriggerLeadHistoService triggerLeadHistoService;
 
     @Autowired
-    public LeadExpenseRestController(LeadExpenseService leadExpenseService) {
+    public LeadExpenseRestController(LeadExpenseService leadExpenseService, TriggerLeadHistoService triggerLeadHisto) {
         this.leadExpenseService = leadExpenseService;
+        this.triggerLeadHistoService = triggerLeadHisto;
     }
 
 
@@ -41,10 +43,24 @@ public class LeadExpenseRestController {
 
     @GetMapping("/total")
     public ResponseEntity<BigDecimal> getTotalExpenses(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
+            LocalDateTime startDate,
 
-        BigDecimal total = leadExpenseService.getTotalExpensesBetweenDates(startDate, endDate);
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd[['T']HH:mm[:ss]]")
+            LocalDateTime endDate) {
+
+        List<TriggerLeadHisto> triggerLeadHistos = triggerLeadHistoService.getTriggerLeadHistoBetweenDates(startDate, endDate);
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (TriggerLeadHisto triggerLead : triggerLeadHistos) {
+            LeadExpense latestExpense = leadExpenseService.findLatestByTriggerLeadHistoId(triggerLead.getId());
+            if (latestExpense != null && latestExpense.getAmount() != null) {
+                total = total.add(latestExpense.getAmount());
+            }
+        }
+
         return ResponseEntity.ok(total);
     }
 
