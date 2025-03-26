@@ -20,6 +20,8 @@ public interface CustomerService {
 
     public void delete(Customer customer);
 
+    List<String> findAllEmails();
+
     public List<Customer> getRecentCustomers(int userId, int limit);
 
     List<Customer> getBetweenDate(LocalDateTime date1, LocalDateTime date2);

@@ -25,6 +25,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     long countByUserId(int userId);
 
+    @Query("SELECT c.email FROM Customer c")
+    List<String> findAllEmails();
+
     @Query("SELECT c FROM Customer c " +
             "WHERE (:date1 IS NULL OR c.createdAt >= :date1) " +
             "AND (:date2 IS NULL OR c.createdAt <= :date2)")
