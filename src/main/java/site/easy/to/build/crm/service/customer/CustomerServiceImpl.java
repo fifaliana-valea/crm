@@ -49,6 +49,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<String> findAllEmails(){return customerRepository.findAllEmails();}
+    @Override
     public List<Customer> getRecentCustomers(int userId, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
         return customerRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);

@@ -41,6 +41,12 @@ public class ImportCustomerService {
         List<String> errorLines = new ArrayList<>();
         Set<String> existingEmails = new HashSet<>();
 
+        // Récupérer tous les emails existants dans la base de données
+        List<String> databaseEmails = customerService.findAllEmails(); // Vous devez implémenter cette méthode dans votre repository
+
+        // Ajouter les emails de la base de données à l'ensemble existingEmails
+        existingEmails.addAll(databaseEmails);
+
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
@@ -57,11 +63,11 @@ public class ImportCustomerService {
                     lineErrors.add("Email client manquant");
                 } else if (!isValidEmail(email)) {
                     lineErrors.add("Format email client invalide");
-                } else if (existingEmails.contains(email)) {
-                    lineErrors.add("Email en double");
+                } else if (existingEmails.contains(email.trim())) {
+                    lineErrors.add("Email existe déjà dans la base de données");
                 } else {
                     importCustomer.setCustomerEmail(email.trim());
-                    existingEmails.add(email.trim());
+                    existingEmails.add(email.trim()); // Ajouter pour détection des doublons dans le fichier
                 }
             } catch (Exception e) {
                 lineErrors.add("Erreur de lecture de l'email client");
@@ -94,7 +100,6 @@ public class ImportCustomerService {
         }
         return importCustomers;
     }
-
     private boolean isValidEmail(String email) {
         if (email == null)
             return false;
