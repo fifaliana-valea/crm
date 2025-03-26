@@ -20,23 +20,7 @@ public class LeadExpenseServiceImpl implements LeadExpenseService{
 
     @Override
     public BigDecimal getTotalExpensesBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
-        // Si les deux dates sont null, on retourne la somme totale
-        if (startDate == null && endDate == null) {
-            return leadExpenseRepository.sumAmountBetweenDates(null, null);
-        }
-
-        // Si seule la date de fin est null, on prend tout depuis startDate
-        if (endDate == null) {
-            return leadExpenseRepository.sumAmountBetweenDates(startDate, null);
-        }
-
-        // Si seule la date de début est null, on prend tout jusqu'à endDate
-        if (startDate == null) {
-            return leadExpenseRepository.sumAmountBetweenDates(null, endDate);
-        }
-
-        // Les deux dates sont renseignées
-        return leadExpenseRepository.sumAmountBetweenDates(startDate, endDate);
+        return leadExpenseRepository.getTotalLatestExpenseBetweenDates(startDate, endDate);
     }
     @Override
     public LeadExpense save(LeadExpense leadExpense) {

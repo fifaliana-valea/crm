@@ -19,10 +19,23 @@ public interface LeadExpenseRepository extends JpaRepository<LeadExpense, Long> 
 
     Optional<LeadExpense> findById(Integer id);
 
-    @Query("SELECT COALESCE(SUM(le.amount), 0.00) FROM LeadExpense le " +
-            "WHERE (:startDate IS NULL OR le.createdAt >= :startDate) " +
-            "AND (:endDate IS NULL OR le.createdAt <= :endDate)")
-    BigDecimal sumAmountBetweenDates(
+    @Query("""
+    SELECT COALESCE(SUM(e.amount), 0.0) FROM TicketExpense e
+    WHERE e.id IN (
+        SELECT MAX(e2.id) FROM TicketExpense e2
+        WHERE e2.ticketHisto.id = e.ticketHisto.id
+        GROUP BY e2.ticketHisto.id
+    )
+    AND e.ticketHisto IN (
+        SELECT t FROM TicketHisto t
+        WHERE (:startDate IS NULL OR t.createdAt >= :startDate)
+        AND (:endDate IS NULL OR t.createdAt <= :endDate)
+        AND (t.deleteAt IS NULL)
+    )
+""")
+    BigDecimal getTotalLatestExpenseBetweenDates(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
+
+
 }

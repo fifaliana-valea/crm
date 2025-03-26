@@ -15,10 +15,22 @@ public interface TicketExpenseRepository extends JpaRepository<TicketExpense, In
     @Query(value = "SELECT * FROM ticket_expense WHERE ticket_histo_id = :idTicketHisto ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
     Optional<TicketExpense> findByIdHistoDateMax(@Param("idTicketHisto") int idTicketHisto);
 
-    @Query("SELECT COALESCE(SUM(te.amount), 0.00) FROM TicketExpense te " +
-            "WHERE (:startDate IS NULL OR te.createdAt >= :startDate) " +
-            "AND (:endDate IS NULL OR te.createdAt <= :endDate)")
-    BigDecimal sumAmountBetweenDates(
+    @Query("""
+    SELECT COALESCE(SUM(e.amount), 0.0) FROM TicketExpense e
+    WHERE e.createdAt = (
+        SELECT MAX(e2.createdAt) FROM TicketExpense e2
+        WHERE e2.ticketHisto.id = e.ticketHisto.id
+    )
+    AND e.ticketHisto IN (
+        SELECT t FROM TicketHisto t
+        WHERE (t.deleteAt IS NULL OR t.deleteAt >= :startDate)
+        AND t.createdAt <= :endDate
+    )
+""")
+    BigDecimal getTotalLatestExpenseBetweenDates(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
+
+
+
 }
