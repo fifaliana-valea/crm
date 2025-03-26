@@ -31,133 +31,224 @@
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
 <div class="preloader">
-  <div class="loader">
-    <div class="loader__figure"></div>
-    <p class="loader__label">CRM</p>
-  </div>
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
 </div>
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
 <div id="main-wrapper">
-  <!-- ============================================================== -->
-  <!-- Topbar header - style you can find in pages.scss -->
-  <!-- ============================================================== -->
-  <div th:insert="~{/general/header.html}"></div>
-  <!-- ============================================================== -->
-  <!-- End Topbar header -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- Left Sidebar - style you can find in sidebar.scss  -->
-  <!-- ============================================================== -->
-  <div th:insert="~{/general/left-sidebar.html}"></div>
-  <!-- ============================================================== -->
-  <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- Page wrapper  -->
-  <!-- ============================================================== -->
-  <div class="page-wrapper">
     <!-- ============================================================== -->
-    <!-- Container fluid  -->
+    <!-- Topbar header - style you can find in pages.scss -->
     <!-- ============================================================== -->
-    <div class="container-fluid">
-      <!-- ============================================================== -->
-      <!-- Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <div th:insert="~{/general/page-titles.html}"></div>
-      <!-- ============================================================== -->
-      <!-- End Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Start Page Content -->
-      <!-- ============================================================== -->
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Import CSV</h4>
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Import CSV</h4>
+                            
+                            <!-- Messages -->
+                            <!-- <div th:if="${success}" class="alert alert-success">
+                                <span th:text="${success}"></span>
+                            </div>
+                            
+                            <div th:if="${error}" class="alert alert-danger">
+                                <span th:text="${error}"></span>
+                                <span th:if="${fileName}" th:text="' (Fichier: ' + ${fileName} + ')'"></span>
+                            </div> -->
 
-              <!-- Messages -->
-              <div th:if="${success}" class="alert alert-success">
-                <span th:text="${success}"></span>
-              </div>
+                            <div th:if="${message}" class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                                <span th:text="${message}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
 
-              <div th:if="${error}" class="alert alert-danger">
-                <span th:text="${error}"></span>
-                <span th:if="${fileName}" th:text="' (Fichier: ' + ${fileName} + ')'"></span>
-              </div>
+                            <!-- Formulaire amélioré -->
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Importation de fichiers CSV</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form th:action="@{/data/config/import-csv}" enctype="multipart/form-data" method="post">
+                                        <div class="row g-3">
+                                            <!-- Customer File -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="CustomerFile" class="form-label fw-bold">
+                                                        <i class="bi bi-file-earmark-person me-2"></i>Fichier Clients (CSV)
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <input type="file" class="form-control" id="CustomerFile" name="CustomerFile" accept=".csv" required>
+                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                                                    </div>
+                                                    <small class="form-text text-muted">Format attendu: email, nom</small>
+                                                </div>
+                                            </div>
 
-              <!-- Formulaire -->
-              <form th:action="@{/data/config/customers/import}"
-                    enctype="multipart/form-data" method="post">
-                <div class="form-group">
-                  <label for="file">Fichier CSV Customer:</label>
-                  <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
-                  <small class="form-text text-muted">
-                    Format: customer_email,customer_name
-                  </small>
+                                            <!-- Budget File -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="BudgetCustomerFile" class="form-label fw-bold">
+                                                        <i class="bi bi-cash-stack me-2"></i>Fichier Budgets (CSV)
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <input type="file" class="form-control" id="BudgetCustomerFile" name="BudgetCustomerFile" accept=".csv" required>
+                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                                                    </div>
+                                                    <small class="form-text text-muted">Format attendu: client, montant</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- LeadTicket File -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="LeadTicketFile" class="form-label fw-bold">
+                                                        <i class="bi bi-ticket-detailed me-2"></i>Fichier Tickets (CSV)
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <input type="file" class="form-control" id="LeadTicketFile" name="LeadTicketFile" accept=".csv" required>
+                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                                                    </div>
+                                                    <small class="form-text text-muted">Format attendu: client, sujet</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                            <button type="reset" class="btn btn-outline-secondary me-md-2">
+                                                <i class="bi bi-x-circle me-1"></i> Annuler
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-upload me-1"></i> Importer les fichiers
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Affichage des erreurs dans un tableau -->
+                            <div th:if="${error}" class="mt-4">
+                                <div class="card border-danger">
+                                    <div class="card-header bg-danger text-white">
+                                        <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Erreurs d'importation</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th style="width: 10%">#</th>
+                                                    <th style="width: 30%">Fichier</th>
+                                                    <th style="width: 60%">Message d'erreur</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Si l'erreur est une simple chaîne -->
+                                                <tr th:if="${error and !(error instanceof java.util.List)}">
+                                                    <td>1</td>
+                                                    <td>Importation globale</td>
+                                                    <td th:text="${error}" class="text-danger"></td>
+                                                </tr>
+
+                                                <!-- Si l'erreur est une liste d'erreurs -->
+                                                <tr th:each="err, iter : ${error}" th:if="${error instanceof java.util.List}">
+                                                    <td th:text="${iter.count}"></td>
+                                                    <td th:text="${err.fileName} ?: 'Non spécifié'"></td>
+                                                    <td th:text="${err.message}" class="text-danger"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Erreurs détaillées -->
+                            <!-- <div th:if="${errors}" class="mt-4">
+                                <h5>Détails des erreurs :</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Ligne</th>
+                                                <th>Email</th>
+                                                <th>Nom</th>
+                                                <th>Champ</th>
+                                                <th>Erreur</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="err : ${errors}">
+                                                <td th:text="${err.lineNumber}"></td>
+                                                <td th:text="${err.email}"></td>
+                                                <td th:text="${err.name}"></td>
+                                                <td th:text="${err.field}"></td>
+                                                <td th:text="${err.message}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Importer CSV</button>
-              </form>
-
-              <!-- Erreurs détaillées -->
-              <div th:if="${errors}" class="mt-4">
-                <h5>Détails des erreurs :</h5>
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm">
-                    <thead class="thead-light">
-                    <tr>
-                      <th>Ligne</th>
-                      <th>Email</th>
-                      <th>Nom</th>
-                      <th>Champ</th>
-                      <th>Erreur</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="err : ${errors}">
-                      <td th:text="${err.lineNumber}"></td>
-                      <td th:text="${err.email}"></td>
-                      <td th:text="${err.name}"></td>
-                      <td th:text="${err.field}"></td>
-                      <td th:text="${err.message}"></td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- ============================================================== -->
-      <!-- End Page Content -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Right sidebar -->
-      <!-- ============================================================== -->
-      <!-- .right-sidebar -->
-      <div th:insert="~{/general/right-sidebar.html}"></div>
-      <!-- ============================================================== -->
-      <!-- End Right sidebar -->
-      <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
-    <!-- End Container fluid  -->
+    <!-- End Page wrapper  -->
     <!-- ============================================================== -->
-  </div>
-  <!-- ============================================================== -->
-  <!-- End Page wrapper  -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- footer -->
-  <!-- ============================================================== -->
-  <div th:insert="~{/general/footer.html}"></div>
-  <!-- ============================================================== -->
-  <!-- End footer -->
-  <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
 </div>
 <!-- ============================================================== -->
 <!-- End Wrapper -->
@@ -166,7 +257,7 @@
 <!-- All Jquery -->
 <!-- ============================================================== -->
 <script th:inline="javascript">
-  var home = /*[[${home}]]*/ null;
+    var home = /*[[${home}]]*/ null;
 </script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
@@ -191,29 +282,29 @@
 <script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script>
-  Dropzone.autoDiscover = false;
-  $(document).ready(function() {
-    $('.textarea_editor').wysihtml5();
-  });
+    Dropzone.autoDiscover = false;
+    $(document).ready(function() {
+        $('.textarea_editor').wysihtml5();
+    });
 </script>
 <script th:inline="javascript">
-  /*<![CDATA[*/
+    /*<![CDATA[*/
 
-  var existingFiles = /*[[${attachments}]]*/ 'default';
-  var folders = /*[[${folders}]]*/ 'default';
-  var driveFolderId = "";
+    var existingFiles = /*[[${attachments}]]*/ 'default';
+    var folders = /*[[${folders}]]*/ 'default';
+    var driveFolderId = "";
 
-  /*]]>*/
+    /*]]>*/
 </script>
 <script th:src="@{/js/library/bootstrap-material-datetimepicker.js}"></script>
 <script th:src="@{/js/library/bootstrap-datepicker.min.js}"></script>
 <script>
-  // MAterial Date picker
-  $('#startDate, #endDate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
-  $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
-  $('#date-format').bootstrapMaterialDatePicker({ format: 'dddd DD MMMM YYYY - HH:mm' });
+    // MAterial Date picker
+    $('#startDate, #endDate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
+    $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
+    $('#date-format').bootstrapMaterialDatePicker({ format: 'dddd DD MMMM YYYY - HH:mm' });
 
-  $('#min-date').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', minDate: new Date() });
+    $('#min-date').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', minDate: new Date() });
 </script>
 <script th:src="@{/js/general-dropzone.js}" type="text/javascript"
         th:data-csrf-token="${_csrf.token}" th:data-csrf-header="${_csrf.headerName}"></script>

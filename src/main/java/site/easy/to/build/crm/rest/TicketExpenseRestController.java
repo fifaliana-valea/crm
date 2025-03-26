@@ -21,14 +21,11 @@ public class TicketExpenseRestController {
     // Récupérer une dépense par son ID
     @GetMapping("/{id}")
     public ResponseEntity<TicketExpense> getById(@PathVariable int id) {
-        // Récupération de la dépense à partir du service
         TicketExpense ticketExpense = ticketExpenseService.getLatestExpenseForTicketHisto(id);
 
         if (ticketExpense != null) {
-            // Si une dépense est trouvée, la retourner avec un statut HTTP 200
             return ResponseEntity.ok(ticketExpense);
         } else {
-            // Si aucune dépense n'est trouvée, retourner une dépense avec des valeurs par défaut
             TicketExpense defaultTicketExpense = new TicketExpense();
             defaultTicketExpense.setId(0);
             defaultTicketExpense.setAmount(BigDecimal.ZERO);  // Utilisation de BigDecimal.ZERO pour un montant par défaut
