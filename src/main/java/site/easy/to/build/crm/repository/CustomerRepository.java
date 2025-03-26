@@ -10,6 +10,7 @@ import site.easy.to.build.crm.entity.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
@@ -23,10 +24,12 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     public List<Customer> findByUserIdOrderByCreatedAtDesc(int userId, Pageable pageable);
 
+    @Query("SELECT c.email FROM Customer c")
+    Set<String> findAllEmails();
     long countByUserId(int userId);
 
-    @Query("SELECT c.email FROM Customer c")
-    List<String> findAllEmails();
+//    @Query("SELECT c.email FROM Customer c")
+//    List<String> findAllEmails();
 
     @Query("SELECT c FROM Customer c " +
             "WHERE (:date1 IS NULL OR c.createdAt >= :date1) " +

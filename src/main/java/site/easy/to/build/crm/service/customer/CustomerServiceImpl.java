@@ -8,6 +8,7 @@ import site.easy.to.build.crm.entity.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -44,12 +45,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Set<String> findAllEmails() {
+        return customerRepository.findAllEmails();
+    }
+    @Override
     public void delete(Customer customer) {
         customerRepository.delete(customer);
     }
 
-    @Override
-    public List<String> findAllEmails(){return customerRepository.findAllEmails();}
+//    @Override
+//    public List<String> findAllEmails(){return customerRepository.findAllEmails();}
     @Override
     public List<Customer> getRecentCustomers(int userId, int limit) {
         Pageable pageable = PageRequest.of(0, limit);

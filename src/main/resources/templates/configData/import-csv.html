@@ -8,15 +8,155 @@
 <!-- Editable CSS -->
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
 <link th:href="@{/css/bootstrap-material-datetimepicker.css}" rel="stylesheet">
-
 <link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css"/>
-
 <link th:href="@{/css/jquery-clockpicker.min.css}" rel="stylesheet">
 
 <!-- Custom CSS -->
 <link th:href="@{/css/style.min.css}" rel="stylesheet">
 <!-- page css -->
 <link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<style>
+    /* Style personnalisé pour les messages d'erreur */
+    .alert-container {
+        margin-bottom: 20px;
+    }
+    
+    .alert-custom {
+        border-radius: 4px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        font-size: 14px;
+    }
+    
+    .alert-success-custom {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+    
+    .alert-danger-custom {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+    
+    .alert-danger-custom ul {
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+    
+    .alert-danger-custom li {
+        margin-bottom: 5px;
+    }
+    
+    .error-details {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .error-title {
+        font-weight: 600;
+        color: #721c24;
+        margin-bottom: 10px;
+    }
+    
+    .file-name {
+        font-weight: bold;
+        color: #dc3545;
+    }
+    
+    .import-form {
+        background: #fff;
+        padding: 25px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+    
+    .btn-import {
+        background-color: #3f51b5;
+        border-color: #3f51b5;
+        padding: 8px 20px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    
+    .btn-import:hover {
+        background-color: #303f9f;
+        border-color: #283593;
+    }
+
+     .import-card {
+         border-radius: 10px;
+         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+     }
+
+    .file-upload-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .file-upload-label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-upload-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .file-upload-wrapper input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-upload-text {
+        flex-grow: 1;
+        padding: 0.375rem 0.75rem;
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem 0 0 0.25rem;
+        border-right: none;
+    }
+
+    .file-upload-btn {
+        border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .btn-import {
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .alert-container .alert {
+        border-left: 4px solid;
+    }
+
+    .alert-success {
+        border-left-color: #28a745;
+    }
+
+    .alert-danger {
+        border-left-color: #dc3545;
+    }
+</style>
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -74,150 +214,87 @@
             <!-- ============================================================== -->
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card import-card">
                         <div class="card-body">
-                            <h4 class="card-title">Import CSV</h4>
-                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title mb-0">
+                                    <i class="fas fa-file-import text-primary mr-2"></i>Importation de fichiers CSV
+                                </h4>
+                            </div>
+
                             <!-- Messages -->
-                            <!-- <div th:if="${success}" class="alert alert-success">
-                                <span th:text="${success}"></span>
-                            </div>
-                            
-                            <div th:if="${error}" class="alert alert-danger">
-                                <span th:text="${error}"></span>
-                                <span th:if="${fileName}" th:text="' (Fichier: ' + ${fileName} + ')'"></span>
-                            </div> -->
-
-                            <div th:if="${message}" class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                                <span th:text="${message}"></span>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-
-                            <!-- Formulaire amélioré -->
-                            <div class="card shadow-sm">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0">Importation de fichiers CSV</h5>
+                            <div class="alert-container mb-4">
+                                <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    <span th:text="${message}"></span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                <div class="card-body">
-                                    <form th:action="@{/data/config/import-csv}" enctype="multipart/form-data" method="post">
-                                        <div class="row g-3">
-                                            <!-- Customer File -->
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="CustomerFile" class="form-label fw-bold">
-                                                        <i class="bi bi-file-earmark-person me-2"></i>Fichier Clients (CSV)
-                                                    </label>
-                                                    <div class="input-group">
-                                                        <input type="file" class="form-control" id="CustomerFile" name="CustomerFile" accept=".csv" required>
-                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
-                                                    </div>
-                                                    <small class="form-text text-muted">Format attendu: email, nom</small>
-                                                </div>
-                                            </div>
 
-                                            <!-- Budget File -->
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="BudgetCustomerFile" class="form-label fw-bold">
-                                                        <i class="bi bi-cash-stack me-2"></i>Fichier Budgets (CSV)
-                                                    </label>
-                                                    <div class="input-group">
-                                                        <input type="file" class="form-control" id="BudgetCustomerFile" name="BudgetCustomerFile" accept=".csv" required>
-                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
-                                                    </div>
-                                                    <small class="form-text text-muted">Format attendu: client, montant</small>
-                                                </div>
-                                            </div>
-
-                                            <!-- LeadTicket File -->
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="LeadTicketFile" class="form-label fw-bold">
-                                                        <i class="bi bi-ticket-detailed me-2"></i>Fichier Tickets (CSV)
-                                                    </label>
-                                                    <div class="input-group">
-                                                        <input type="file" class="form-control" id="LeadTicketFile" name="LeadTicketFile" accept=".csv" required>
-                                                        <span class="input-group-text"><i class="bi bi-upload"></i></span>
-                                                    </div>
-                                                    <small class="form-text text-muted">Format attendu: client, sujet</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                                            <button type="reset" class="btn btn-outline-secondary me-md-2">
-                                                <i class="bi bi-x-circle me-1"></i> Annuler
-                                            </button>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="bi bi-upload me-1"></i> Importer les fichiers
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <!-- Affichage des erreurs dans un tableau -->
-                            <div th:if="${error}" class="mt-4">
-                                <div class="card border-danger">
-                                    <div class="card-header bg-danger text-white">
-                                        <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Erreurs d'importation</h5>
+                                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                    <strong>Erreur lors de l'importation :</strong>
+                                    <div class="error-details mt-2" th:if="${error.contains('|')}">
+                                        <ul class="mb-0 pl-3">
+                                            <li th:each="err : ${#strings.arraySplit(error,'|')}" th:text="${err}"></li>
+                                        </ul>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-hover">
-                                                <thead class="table-light">
-                                                <tr>
-                                                    <th style="width: 10%">#</th>
-                                                    <th style="width: 30%">Fichier</th>
-                                                    <th style="width: 60%">Message d'erreur</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <!-- Si l'erreur est une simple chaîne -->
-                                                <tr th:if="${error and !(error instanceof java.util.List)}">
-                                                    <td>1</td>
-                                                    <td>Importation globale</td>
-                                                    <td th:text="${error}" class="text-danger"></td>
-                                                </tr>
-
-                                                <!-- Si l'erreur est une liste d'erreurs -->
-                                                <tr th:each="err, iter : ${error}" th:if="${error instanceof java.util.List}">
-                                                    <td th:text="${iter.count}"></td>
-                                                    <td th:text="${err.fileName} ?: 'Non spécifié'"></td>
-                                                    <td th:text="${err.message}" class="text-danger"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                    <span th:unless="${error.contains('|')}" th:text="${error}"></span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                             </div>
-                            <!-- Erreurs détaillées -->
-                            <!-- <div th:if="${errors}" class="mt-4">
-                                <h5>Détails des erreurs :</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-sm">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Ligne</th>
-                                                <th>Email</th>
-                                                <th>Nom</th>
-                                                <th>Champ</th>
-                                                <th>Erreur</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="err : ${errors}">
-                                                <td th:text="${err.lineNumber}"></td>
-                                                <td th:text="${err.email}"></td>
-                                                <td th:text="${err.name}"></td>
-                                                <td th:text="${err.field}"></td>
-                                                <td th:text="${err.message}"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                            <!-- Formulaire -->
+                            <form th:action="@{/data/config/import-csv}"
+                                  enctype="multipart/form-data" method="post" class="import-form">
+                                <div class="form-group file-upload-group">
+                                    <label for="CustomerFile" class="file-upload-label">
+                                        <span>Fichier CSV Customer</span>
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" class="form-control-file" id="CustomerFile" name="CustomerFile" accept=".csv" required>
+                                            <span class="file-upload-text">Choisir un fichier</span>
+                                            <span class="file-upload-btn btn btn-outline-secondary">
+                                    <i class="fas fa-folder-open"></i> Parcourir
+                                </span>
+                                        </div>
+                                    </label>
                                 </div>
-                            </div> -->
+
+                                <div class="form-group file-upload-group">
+                                    <label for="BudgetCustomerFile" class="file-upload-label">
+                                        <span>Fichier CSV Budget</span>
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" class="form-control-file" id="BudgetCustomerFile" name="BudgetCustomerFile" accept=".csv" required>
+                                            <span class="file-upload-text">Choisir un fichier</span>
+                                            <span class="file-upload-btn btn btn-outline-secondary">
+                                    <i class="fas fa-folder-open"></i> Parcourir
+                                </span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group file-upload-group">
+                                    <label for="LeadTicketFile" class="file-upload-label">
+                                        <span>Fichier CSV LeadTicket</span>
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" class="form-control-file" id="LeadTicketFile" name="LeadTicketFile" accept=".csv" required>
+                                            <span class="file-upload-text">Choisir un fichier</span>
+                                            <span class="file-upload-btn btn btn-outline-secondary">
+                                    <i class="fas fa-folder-open"></i> Parcourir
+                                </span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="text-right mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-import">
+                                        <i class="fas fa-upload mr-2"></i> Importer les fichiers
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

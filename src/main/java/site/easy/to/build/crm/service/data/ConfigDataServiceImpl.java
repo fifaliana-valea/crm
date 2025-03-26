@@ -32,10 +32,12 @@ public class ConfigDataServiceImpl implements ConfigDataService {
                     "lead_action",
                     "google_drive_file",
                     "file",
+                    "rate_config",
                     "contract_settings",
                     "lead_settings",
                     "ticket_settings",
-                    "customer"
+                    "customer",
+                    "budget"
             };
 
             // Tronquer chaque table

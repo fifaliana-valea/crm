@@ -35,17 +35,16 @@ public class ImportCustomerService {
         this.customerService = customerService;
     }
 
+
     @Transactional
     public List<ImportCustomer> checkCsv(MultipartFile file) throws Exception {
         List<ImportCustomer> importCustomers = new ArrayList<>();
         List<String> errorLines = new ArrayList<>();
-        Set<String> existingEmails = new HashSet<>();
+        Set<String> existingEmailsInFile = new HashSet<>();
 
         // Récupérer tous les emails existants dans la base de données
-        List<String> databaseEmails = customerService.findAllEmails(); // Vous devez implémenter cette méthode dans votre repository
-
-        // Ajouter les emails de la base de données à l'ensemble existingEmails
-        existingEmails.addAll(databaseEmails);
+        Set<String> existingEmailsInDatabase = customerService.findAllEmails(); // Vous devez implémenter cette
+        // méthode dans votre repository
 
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
@@ -63,11 +62,13 @@ public class ImportCustomerService {
                     lineErrors.add("Email client manquant");
                 } else if (!isValidEmail(email)) {
                     lineErrors.add("Format email client invalide");
-                } else if (existingEmails.contains(email.trim())) {
+                } else if (existingEmailsInFile.contains(email)) {
+                    lineErrors.add("Email en double dans le fichier");
+                } else if (existingEmailsInDatabase.contains(email.trim())) {
                     lineErrors.add("Email existe déjà dans la base de données");
                 } else {
                     importCustomer.setCustomerEmail(email.trim());
-                    existingEmails.add(email.trim()); // Ajouter pour détection des doublons dans le fichier
+                    existingEmailsInFile.add(email.trim());
                 }
             } catch (Exception e) {
                 lineErrors.add("Erreur de lecture de l'email client");
@@ -100,6 +101,7 @@ public class ImportCustomerService {
         }
         return importCustomers;
     }
+
     private boolean isValidEmail(String email) {
         if (email == null)
             return false;
